@@ -131,3 +131,26 @@ def filter_search(
     ).order_by(
         models.UserInfo.name.asc()
     ).all()
+    
+def add_profile_pic(db: Session, id: str, path: str):
+    pic_data = db.query(
+        models.ProfilePic
+    ).filter(
+        models.ProfilePic.id == id
+    ).first()
+    
+    if pic_data:
+        pic_data.path = path
+    
+    else:
+        db.add(pic_data)
+    db.commit()
+    db.refresh(pic_data)
+    return pic_data
+    
+def get_profile_path(db: Session, id: str):
+    return db.query(
+        models.ProfilePic
+    ).filter(
+        models.ProfilePic.id == id
+    ).first()

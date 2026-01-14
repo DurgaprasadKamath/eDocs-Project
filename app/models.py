@@ -16,6 +16,12 @@ class UserInfo(Base):
     role = Column(String, nullable=False)
     date = Column(DateTime, nullable=False)
     
+class ProfilePic(Base):
+    __tablename__ = 'profile_pic'
+
+    id = Column(String, primary_key=True, nullable=False)
+    path = Column(String, nullable=False)
+    
 class DocumentInfo(Base):
     __tablename__ = 'documents'
 

@@ -1,0 +1,59 @@
+{% extends "profile.html" %} {% block title %} eDocs - Profile {% endblock title
+%} {% block profile %}
+<div class="profile-data">
+  <div class="block1">
+    <div class="profile-image-main">
+      <div class="profile-pic">
+        {% if not noPic %}
+        <img src="{{picPath}}" />
+        {% else %}
+        <div class="profileTxt">
+          <p>{{name[0]}}</p>
+        </div>
+        {% endif %}
+      </div>
+      <div class="change-profile">
+        <form
+          action="/upload-profile"
+          method="post"
+          enctype="multipart/form-data"
+          id="profile-form"
+        >
+          <input type="text" name="id" value="{{id}}" hidden />
+          <input
+            type="file"
+            name="profilePicture"
+            id="profilePicInput"
+            accept="image/*"
+            hidden
+            required
+          />
+          <button type="button" onclick="openFilePicker()">
+            Change Picture
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="details">
+      <p id="name">{{name}}</p>
+      <p id="email">{{email}}</p>
+    </div>
+  </div>
+  <div class="block2"></div>
+  <div class="block3"></div>
+</div>
+
+<script>
+  function openFilePicker() {
+    document.getElementById("profilePicInput").click();
+  }
+
+  document
+    .getElementById("profilePicInput")
+    .addEventListener("change", function () {
+      if (this.files.length > 0) {
+        document.getElementById("profile-form").submit();
+      }
+    });
+</script>
+{% endblock profile %}

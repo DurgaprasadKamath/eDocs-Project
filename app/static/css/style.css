@@ -957,7 +957,7 @@ nav.navbar-main {
     background-color: none;
     gap: 1.5vh;
     padding-top: 16vh;
-    p#isEmpty{
+    p#isEmpty {
       margin: 0%;
       font-size: 1.2rem;
       font-weight: 500;
@@ -989,6 +989,214 @@ nav.navbar-main {
         a {
           display: inline;
         }
+      }
+    }
+  }
+}
+
+.profile-main-container {
+  background-color: var(--body-background);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  .content1 {
+    height: 100%;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5vh;
+    padding: 0% 3%;
+    background-color: var(--light-blue);
+    box-shadow: 0px 0px 5px var(--text-grey-color);
+    button.back-btn{
+      width: 10%;
+      background-color: transparent;
+      outline: none;
+      border: none;
+      font-size: 1.2rem;
+    }
+    .block1 {
+      height: 25%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2vh;
+      .profile-pic {
+        display: flex;
+        justify-content: center;
+        height: 6vw;
+        width: 6vw;
+        background-color: #072ac8;
+        align-self: center;
+        border-radius: 50px;
+        img {
+          width: 6vw;
+          height: 6vw;
+          object-fit: cover;
+          object-position: center;
+          border-radius: 50px;
+        }
+        .profileTxt {
+          display: flex;
+          p {
+            margin: 0%;
+            align-self: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 600;
+            align-self: center;
+          }
+        }
+      }
+      p#name {
+        margin: 0%;
+        align-self: center;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+    }
+    .block2 {
+      height: 25%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3vh;
+      a.link-item {
+        text-decoration: none;
+        color: var(--text-grey-color);
+        text-align: start;
+        width: 100%;
+        align-self: center;
+        font-size: 1.1rem;
+        font-weight: 550;
+        padding: 4% 8%;
+        transition: 0.3s;
+        i {
+          margin-right: 4%;
+        }
+      }
+      a.link-item.active {
+        color: black;
+        box-shadow: inset 3px 0px 0px var(--primary-color);
+      }
+      a:hover {
+        color: black;
+        transition: 0.3s;
+      }
+    }
+    .block3 {
+      height: 25%;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      a {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        width: 60%;
+        text-align: center;
+        padding: 3% 6%;
+        text-decoration: none;
+        border-radius: 25px;
+        align-self: center;
+        transition: 0.3s;
+        i {
+          margin-right: 3%;
+        }
+      }
+      a:hover {
+        background-color: var(--secondary-color);
+        transition: 0.3s;
+      }
+    }
+  }
+  .content2 {
+    background-color: transparent;
+    width: 75%;
+
+    .profile-data {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 5% 3%;
+      .block1 {
+        display: flex;
+        flex-direction: row;
+        gap: 5vw;
+        padding: 0% 10%;
+        .profile-image-main {
+          display: flex;
+          flex-direction: column;
+          .profile-pic {
+            img {
+              height: 22vh;
+              width: 22vh;
+              object-fit: cover;
+              object-position: center;
+              border-radius: 100px;
+            }
+            .profileTxt {
+              height: 22vh;
+              width: 22vh;
+              display: flex;
+              justify-content: center;
+              p {
+                height: 70%;
+                width: 70%;
+                text-align: center;
+                border-radius: 100px;
+                background-color: var(--primary-color);
+                align-self: center;
+                font-size: 4.5rem;
+                color: white;
+                font-weight: 600;
+                margin: 0%;
+              }
+            }
+          }
+          .change-profile {
+            width: 100%;
+            align-self: center;
+            button {
+              background-color: transparent;
+              border: none;
+              outline: none;
+              width: 100%;
+              font-size: 0.8rem;
+              color: var(--primary-color);
+            }
+          }
+        }
+        .profile-image-main:hover {
+          .change-profile {
+            button {
+              display: inline;
+            }
+          }
+        }
+      }
+    }
+    .details {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      gap: 1vh;
+      p {
+        margin: 0%;
+      }
+      p#name {
+        color: black;
+        font-size: 1.4rem;
+        font-weight: 550;
+      }
+      p#email {
+        color: black;
+        font-size: 1.1rem;
+        font-weight: 500;
       }
     }
   }

@@ -112,6 +112,123 @@ async def read_logout(
 ):
     request.session.clear()
     return RedirectResponse(url="/login", status_code=303)
+
+@app.get("/profile", response_class=HTMLResponse)
+async def read_profile(
+    request: Request,
+    db: Session = Depends(database.get_db)
+):
+    email = request.session.get('email')
+    if not email:
+        return RedirectResponse(url="/login", status_code=303) 
+    user = crud.get_user_by_email(db, email)
+    
+    picPath = crud.get_profile_path(db, user.id)
+    if picPath:
+        picPath = picPath.path
+        nonePic = (len(picPath) == 0)
+    
+        if not nonePic:
+            picPath = str(picPath.replace("app",""))
+    else:
+        picPath = None
+        nonePic = True
+    
+    return templates.TemplateResponse(
+        "profile_data.html",
+        {
+            "request": request,
+            "page": "profile",
+            "email": email,
+            "name": user.name,
+            "id": user.id,
+            "phone": user.phone,
+            "dob": user.dob,
+            "gender": user.gender,
+            "department": user.department,
+            "password": user.password,
+            "picPath": picPath,
+            "noPic": nonePic
+        }
+    )
+
+@app.get("/change-password", response_class=HTMLResponse)
+async def read_profile(
+    request: Request,
+    db: Session = Depends(database.get_db)
+):
+    email = request.session.get('email')
+    if not email:
+        return RedirectResponse(url="/login", status_code=303) 
+    user = crud.get_user_by_email(db, email)
+    
+    picPath = crud.get_profile_path(db, user.id)
+    if picPath:
+        picPath = picPath.path
+        nonePic = (len(picPath) == 0)
+    
+        if not nonePic:
+            picPath = str(picPath.replace("app",""))
+    else:
+        picPath = None
+        nonePic = True
+
+    return templates.TemplateResponse(
+        "change_password.html",
+        {
+            "request": request,
+            "page": "password",
+            "email": email,
+            "name": user.name,
+            "id": user.id,
+            "phone": user.phone,
+            "dob": user.dob,
+            "gender": user.gender,
+            "department": user.department,
+            "password": user.password,
+            "picPath": picPath,
+            "noPic": nonePic
+        }
+    )
+
+@app.get("/edit-profile", response_class=HTMLResponse)
+async def read_profile(
+    request: Request,
+    db: Session = Depends(database.get_db)
+):
+    email = request.session.get('email')
+    if not email:
+        return RedirectResponse(url="/login", status_code=303) 
+    user = crud.get_user_by_email(db, email)
+    
+    picPath = crud.get_profile_path(db, user.id)
+    if picPath:
+        picPath = picPath.path
+        nonePic = (len(picPath) == 0)
+    
+        if not nonePic:
+            picPath = str(picPath.replace("app",""))
+    else:
+        picPath = None
+        nonePic = True
+    
+    return templates.TemplateResponse(
+        "edit_profile.html",
+        {
+            "request": request,
+            "page": "edit",
+            "email": email,
+            "name": user.name,
+            "id": user.id,
+            "phone": user.phone,
+            "dob": user.dob,
+            "gender": user.gender,
+            "department": user.department,
+            "password": user.password,
+            "picPath": picPath,
+            "noPic": nonePic
+        }
+    )
     
 #office staff backend
 @app.get("/office/dashboard", response_class=HTMLResponse)

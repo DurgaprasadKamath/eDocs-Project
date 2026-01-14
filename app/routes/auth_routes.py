@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Request, Form, Depends, status
+from fastapi import APIRouter, Request, Form, Depends, status, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from app import database, models, crud, schemas
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from datetime import datetime
+import os
+import shutil
 
 router = APIRouter()
 
@@ -574,3 +576,22 @@ async def get_search_filter(
             "isEmpty": (len(allUser) == 0)
         }
     )
+    
+@router.post("/upload-profile")
+async def upload_profile(
+    request: Request,
+    id: str = Form(...),
+    profilePicture: UploadFile = File(...),
+    db: Session = Depends(database.get_db)
+):
+    _, ext = os.path.splitext(profilePicture.filename)
+
+    filename = f"{id}{ext}"
+    file_path = f"app/static/images/profile_pictures/{filename}"
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(profilePicture.file, buffer)
+        
+    crud.add_profile_pic(db, id, file_path)
+
+    return RedirectResponse(url="/profile", status_code=303)
