@@ -1,2 +1,69 @@
-{% extends "profile.html" %} {% block title %} eDocs - Edit Profile {% endblock title
-%} {% block profile %} {% endblock profile %}
+{% extends "profile.html" %} {% block title %} eDocs - Edit Profile {% endblock
+title %} {% block profile %}
+
+<div class="edit-main-container">
+  <form action="/edit-profile" id="editForm" method="post">
+    <input type="email" name="email" value="{{email}}" hidden>
+    <div class="block1">
+      <div class="input-block">
+        <p id="label">Full Name:</p>
+        <input
+          type="text"
+          name="name"
+          value="{{name}}"
+          placeholder="Full Name"
+          required
+        />
+      </div>
+      <div class="input-block">
+        <p id="label">Dob:</p>
+        <input
+          type="date"
+          name="dob"
+          value="{{dob}}"
+          placeholder="Date of Birth"
+          required
+        />
+      </div>
+    </div>
+    <div class="block2">
+      <div class="input-block">
+        <p id="label">Gender:</p>
+        <select name="gender" required>
+          <option value="Male" {% if gender=="Male" %} selected {% endif %}>
+            Male
+          </option>
+          <option value="Female" {% if gender=="Female" %} selected {% endif %}>
+            Female
+          </option>
+          <option value="Other" {% if gender=="Other" %} selected {% endif %}>
+            Others
+          </option>
+        </select>
+      </div>
+      <div class="input-block">
+        <p id="label">Department:</p>
+        <select name="department" required>
+          {% for dept in departments %}
+          <option
+            value="{{dept}}"
+            {%
+            if
+            department==dept
+            %}
+            selected
+            {%
+            endif
+            %}
+          >
+            {{departments[dept]}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </form>
+  <button type="submit" form="editForm">Save Changes</button>
+</div>
+
+{% endblock profile %}

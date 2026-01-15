@@ -35,12 +35,75 @@
       </div>
     </div>
     <div class="details">
-      <p id="name">{{name}}</p>
       <p id="email">{{email}}</p>
+      <div class="id-phone">
+        <p id="id">
+          <span id="title">ID Number: </span>
+          {{id}}
+        </p>
+        <p id="phone"><span id="title">Phone Number: </span>{{phone}}</p>
+      </div>
     </div>
   </div>
-  <div class="block2"></div>
-  <div class="block3"></div>
+  <div class="block2">
+    <div class="data1">
+      <p id="title">Name:</p>
+      <p id="value">{{name}}</p>
+      <p id="title">Email:</p>
+      <p id="value">{{email}}</p>
+      <p id="title">ID Number:</p>
+      <p id="value">{{id}}</p>
+    </div>
+    <div class="data2">
+      <p id="title">Date of Birth:</p>
+      <p id="value">{{dob.strftime('%d-%m-%Y')}}</p>
+      <p id="title">Gender:</p>
+      <p id="value">{{gender}}</p>
+      <p id="title">Phone Number:</p>
+      <p id="value">{{phone}}</p>
+    </div>
+    <div class="data3">
+      <p id="title">Department:</p>
+      <p id="value">{{department}}</p>
+      <p id="title">Password:</p>
+      <p id="value">{{'*' * password | length}}</p>
+    </div>
+  </div>
+  <div class="block3">
+    <button id="openModaBtn" onclick="toggleModal()">Delete Account</button>
+  </div>
+</div>
+
+<div class="modal-main-container" id="modalMain" style="display: none">
+  <div class="modal-content-main" id="modalContent">
+    <div class="top-bar">
+      <p id="title">Delete Account</p>
+      <button type="button" onclick="toggleModal()">
+        <i class="fa-solid fa-x"></i>
+      </button>
+    </div>
+    <hr />
+    <div class="text-content">
+      <p id="txt1">Are you sure want to delete your account?</p>
+      <p id="txt2">This will remove all your data from our system.</p>
+    </div>
+    <hr />
+    <div class="footer-content">
+      <p id="verifyTxt">
+        To delete your account, type <strong>{{verifyTxt}}</strong>
+      </p>
+      <form action="/delete-account" method="post">
+        <input
+          type="text"
+          id="verifyInput"
+          placeholder="{{verifyTxt}}"
+          required
+        />
+        <input type="text" name="id" value="{{id}}" hidden />
+        <button type="submit" id="deleteBtn">Delete</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -55,5 +118,32 @@
         document.getElementById("profile-form").submit();
       }
     });
+
+  const verifyInput = document.getElementById("verifyInput");
+  const verifyTxt = document.getElementById("verifyTxt");
+  const deleteBtn = document.getElementById("deleteBtn");
+
+  deleteBtn.disabled = true;
+
+  verifyInput.addEventListener("input", () => {
+    if (verifyInput.value != "{{verifyTxt}}") {
+      verifyInput.style.boxShadow = "0px 0px 0px 1px #da1e37";
+      deleteBtn.disabled = true;
+    } else {
+      verifyInput.style.boxShadow = "none";
+      deleteBtn.disabled = false;
+    }
+  });
+
+  const modalMain = document.getElementById("modalMain");
+
+  function toggleModal() {
+    if (modalMain.style.display === "none") {
+      modalMain.style.display = "flex";
+      modalContent.style.animation = "deleteModalOpen 0.3s ease-in";
+    } else {
+      modalMain.style.display = "none";
+    }
+  }
 </script>
 {% endblock profile %}

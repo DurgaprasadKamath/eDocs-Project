@@ -35,9 +35,9 @@ endblock title %} {% block content %}
         <p id="label">Office Staff ID</p>
         <input
           type="text"
-          id="id_no"
-          value="{{id_no or ''}}"
-          name="id_no"
+          id="id"
+          value="{{id or ''}}"
+          name="id"
           pattern="[0-9]{6,10}"
           placeholder="Enter ID Here"
           title="ID Cannot contain any alphabetic characters"
@@ -83,7 +83,7 @@ endblock title %} {% block content %}
   const submitTxt = document.getElementById("submitTxt");
   const spinner = document.getElementById("spinner");
   const email = document.getElementById("email");
-  const id_no = document.getElementById("id_no");
+  const id = document.getElementById("id");
   const emailError = document.getElementById("emailError");
   const idError = document.getElementById("idError");
   const userForm = document.getElementById("userForm");
@@ -109,8 +109,8 @@ endblock title %} {% block content %}
     }
   });
 
-  id_no.addEventListener("input", () => {
-    if (id_no.value != "{{id_no}}") {
+  id.addEventListener("input", () => {
+    if (id.value != "{{id}}") {
       idError.style.display = "none";
     } else {
       idError.style.display = "block";

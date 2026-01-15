@@ -101,6 +101,82 @@ async def login_user(
     if user.role == 'student':
         return RedirectResponse(url="/student/dashboard", status_code=303)
     
+@router.post("/delete-account")
+async def delete_account(
+    request: Request,
+    id: str = Form(...),
+    db: Session = Depends(database.get_db)
+):
+    crud.delete_account(db, id)
+
+    request.session.clear()
+    return RedirectResponse(url="/login", status_code=303)
+
+@router.post("/edit-profile")
+async def edit_profile(
+    request: Request,
+    email: str = Form(...),
+    name: str = Form(...),
+    dob: str = Form(...),
+    gender: str = Form(...),
+    department: str = Form(...),
+    db: Session = Depends(database.get_db)
+):
+    editProfile = crud.edit_profile(db, email, name, dob, gender, department)
+    
+    if editProfile:
+        user = crud.get_user_by_email(db, email)
+        request.session['email'] = email
+        request.session['name'] = user.name
+        request.session['dob'] = user.dob.strftime('%Y-%m-%d')
+        request.session['gender'] = user.gender
+        request.session['department'] = user.department
+        
+        return RedirectResponse(url="/profile", status_code=303)
+    
+@router.post("/change-password")    
+async def change_password(
+    request: Request,
+    email: str = Form(...),
+    curPassword: str = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(database.get_db)
+):
+    user = crud.get_user_by_email(db, email)
+    
+    picPath = crud.get_profile_path(db, user.id)
+    if picPath:
+        picPath = picPath.path
+        nonePic = (len(picPath) == 0)
+    
+        if not nonePic:
+            picPath = str(picPath.replace("app",""))
+    else:
+        picPath = None
+        nonePic = True
+        
+    if curPassword != user.password:
+        return templates.TemplateResponse(
+            "change_password.html",
+            {
+                "request": request,
+                "page": "password",
+                "curPassword": curPassword,
+                "incorrectTxt": True,
+                "email": email,
+                "name": user.name,
+                "picPath": picPath,
+                "noPic": nonePic,
+            }
+        )
+    
+    if user:
+        user.password = password
+        
+        db.commit()
+        db.refresh(user)
+    return RedirectResponse(url="/profile", status_code=303)
+
 @router.get("/set-password/email")
 async def get_password_email(
     request: Request
@@ -239,7 +315,7 @@ async def set_password_id_department(
             {
                 "request": request,
                 "idError": True,
-                "id": idno,
+                "id_no": idno,
                 "departments": departments
             }
         )

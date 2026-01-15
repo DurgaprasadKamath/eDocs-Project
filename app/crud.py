@@ -96,6 +96,26 @@ def delete_account(db: Session, id: str):
         db.delete(userAccount)
         db.commit()
         
+def edit_profile(
+    db: Session,
+    email: str,
+    name: str,
+    dob: str,
+    gender: str,
+    department: str
+):
+    user = get_user_by_email(db, email)
+    if user:
+        user.name = name
+        user.dob = dob
+        user.gender = gender
+        user.department = department
+
+        db.commit()
+        db.refresh(user)
+        return True
+    return False
+        
 def reset_account(db: Session, id: str):
     resetAccount = db.query(
         models.UserInfo
@@ -143,7 +163,12 @@ def add_profile_pic(db: Session, id: str, path: str):
         pic_data.path = path
     
     else:
+        pic_data = models.ProfilePic(
+            id=id,
+            path=path
+        )
         db.add(pic_data)
+        
     db.commit()
     db.refresh(pic_data)
     return pic_data

@@ -373,17 +373,6 @@ nav.navbar-main {
       p {
         margin: 0%;
       }
-      a.back-btn {
-        cursor: pointer;
-        color: black;
-        width: 15%;
-        background-color: transparent;
-        outline: none;
-        border: none;
-        text-align: start;
-        padding: 0%;
-        font-size: 1.4rem;
-      }
       p#logoTxt {
         font-size: 2rem;
         font-weight: 900;
@@ -1010,12 +999,13 @@ nav.navbar-main {
     padding: 0% 3%;
     background-color: var(--light-blue);
     box-shadow: 0px 0px 5px var(--text-grey-color);
-    button.back-btn{
+    a.back-btn {
       width: 10%;
       background-color: transparent;
       outline: none;
       border: none;
-      font-size: 1.2rem;
+      color: black;
+      font-size: 1rem;
     }
     .block1 {
       height: 25%;
@@ -1119,8 +1109,10 @@ nav.navbar-main {
 
     .profile-data {
       width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       padding: 5% 3%;
       .block1 {
         display: flex;
@@ -1178,6 +1170,150 @@ nav.navbar-main {
           }
         }
       }
+      .block2 {
+        height: 40%;
+        width: 100%;
+        padding: 0% 5%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .data1,
+        .data2,
+        .data3 {
+          width: 28%;
+          display: flex;
+          flex-direction: column;
+          gap: 1vh;
+          p {
+            margin: 0%;
+          }
+          p#title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-grey-color);
+            margin-top: 5%;
+          }
+          p#value {
+            font-size: 1.1rem;
+            color: black;
+            font-weight: 550;
+            margin-bottom: 2%;
+          }
+        }
+      }
+      .block3 {
+        display: flex;
+        width: 90%;
+        justify-content: end;
+        button {
+          background-color: var(--text-red);
+          border: none;
+          outline: none;
+          padding: 1% 3%;
+          border-radius: 25px;
+          color: white;
+          font-weight: 550;
+        }
+      }
+    }
+    .modal-main-container {
+      position: fixed;
+      top: 0%;
+      left: 0%;
+      height: 100vh;
+      width: 100vw;
+      background-color: #5959598a;
+      display: flex;
+      justify-content: center;
+      .modal-content-main {
+        width: 35%;
+        height: 35%;
+        align-self: center;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.5vh;
+        padding: 1.5% 3%;
+        border-radius: 15px;
+        .top-bar {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+          }
+        }
+        hr {
+          margin: 2% 0%;
+        }
+        p {
+          margin: 0%;
+        }
+        p#title {
+          font-size: 1.3rem;
+          font-weight: 550;
+        }
+        .text-content {
+          display: flex;
+          flex-direction: column;
+          p#txt1 {
+            font-size: 1.1rem;
+            font-weight: 500;
+          }
+          p#txt2 {
+            font-size: 0.9rem;
+            font-weight: 450;
+          }
+        }
+        .footer-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5vh;
+          p#verifyTxt {
+            font-size: 0.9rem;
+            strong {
+              color: var(--primary-color);
+            }
+          }
+          form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1vh;
+            input#verifyInput {
+              border-radius: 5px;
+              border: none;
+              outline: none;
+              background-color: var(--input-bg);
+              padding: 1% 3%;
+              font-weight: 550;
+            }
+            input::placeholder {
+              font-size: 0.8rem;
+              font-weight: 550;
+            }
+            button {
+              width: 40%;
+              align-self: flex-end;
+              background-color: var(--text-red);
+              border-radius: 20px;
+              color: white;
+              font-size: 0.9rem;
+              font-weight: 550;
+              padding: 1.5% 2%;
+              border: none;
+              outline: none;
+            }
+            button:disabled {
+              background-color: grey;
+              color: black;
+            }
+          }
+        }
+      }
     }
     .details {
       width: 50%;
@@ -1188,15 +1324,179 @@ nav.navbar-main {
       p {
         margin: 0%;
       }
-      p#name {
+      p#email {
         color: black;
         font-size: 1.4rem;
         font-weight: 550;
       }
-      p#email {
-        color: black;
-        font-size: 1.1rem;
-        font-weight: 500;
+      .id-phone {
+        display: flex;
+        flex-direction: row;
+        gap: 4vw;
+        span#title {
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: var(--text-grey-color);
+        }
+        p#id,
+        p#phone {
+          color: black;
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .edit-main-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7vh;
+    button {
+      width: 20%;
+      align-self: center;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 550;
+      border: none;
+      outline: none;
+      border-radius: 40px;
+      padding: 1% 3%;
+    }
+    form {
+      width: 80%;
+      height: fit-content;
+      align-self: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .block1,
+      .block2 {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        gap: 5vh;
+        .input-block {
+          display: flex;
+          flex-direction: column;
+          gap: 1vh;
+          p#label {
+            margin: 0%;
+            font-size: 0.8rem;
+            font-weight: 550;
+            color: var(--primary-color);
+          }
+          input,
+          select {
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            background-color: white;
+            padding: 2% 3%;
+            font-weight: 550;
+          }
+          input::placeholder {
+            font-size: 0.8rem;
+            font-weight: 550;
+          }
+        }
+      }
+    }
+  }
+  .change-pass-main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 50%;
+      width: 40%;
+      align-self: center;
+      gap: 3.5vh;
+      p.errorTxt {
+        font-size: 0.8rem;
+        font-weight: 550;
+        color: var(--text-red);
+        margin: 0%;
+        i {
+          font-size: 0.7rem;
+          margin-right: 1%;
+        }
+      }
+      button#submitBtn {
+        width: 45%;
+        align-self: center;
+        background-color: var(--primary-color);
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 550;
+        outline: none;
+        border: none;
+        border-radius: 30px;
+        padding: 2% 3%;
+        transition: 0.3s;
+      }
+      button#submitBtn:hover {
+        background-color: var(--secondary-color);
+        transition: 0.3s;
+      }
+      .input-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5vh;
+        p#label {
+          margin: 0%;
+          font-size: 0.8rem;
+          font-weight: 550;
+          color: var(--primary-color);
+        }
+        .password-block {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          background-color: white;
+          border-radius: 5px;
+          input {
+            border-radius: 5px;
+            width: 90%;
+            border: none;
+            outline: none;
+            padding: 2.5% 3%;
+            font-weight: 550;
+          }
+          input::placeholder {
+            font-size: 0.8rem;
+            font-weight: 550;
+          }
+          button {
+            width: 10%;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            text-align: center;
+            align-self: center;
+          }
+        }
+        .strength-pass {
+          p {
+            font-size: 0.8rem;
+            font-weight: 600;
+          }
+          p#weak {
+            color: var(--text-red);
+          }
+          p#medium {
+            color: var(--text-yellow);
+          }
+          p#strong {
+            color: var(--text-dark-green);
+          }
+        }
       }
     }
   }
@@ -1205,6 +1505,15 @@ nav.navbar-main {
 @keyframes modalOpenAnim {
   0% {
     scale: 50%;
+  }
+  100% {
+    scale: 100%;
+  }
+}
+
+@keyframes deleteModalOpen {
+  0% {
+    scale: 85%;
   }
   100% {
     scale: 100%;

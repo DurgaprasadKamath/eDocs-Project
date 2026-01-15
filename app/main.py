@@ -148,7 +148,8 @@ async def read_profile(
             "department": user.department,
             "password": user.password,
             "picPath": picPath,
-            "noPic": nonePic
+            "noPic": nonePic,
+            "verifyTxt": (user.name[0:4] + user.id[4:])
         }
     )
 
@@ -226,7 +227,8 @@ async def read_profile(
             "department": user.department,
             "password": user.password,
             "picPath": picPath,
-            "noPic": nonePic
+            "noPic": nonePic,
+            "departments": departments
         }
     )
     
