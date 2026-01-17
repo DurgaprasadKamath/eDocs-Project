@@ -3,6 +3,8 @@ from sqlalchemy import String, or_
 from app import models, schemas
 from collections import defaultdict
 from datetime import date, datetime
+from app.routes import auth_routes
+
 
 def create_account(
     db: Session,
@@ -71,7 +73,7 @@ def setPasswordData(
         user.phone = phone
         user.gender = gender
         user.department = department
-        user.password = password
+        user.password = auth_routes.hash_password(password)
         user.role = role
         user.date = user.date
         
@@ -85,6 +87,13 @@ def get_all_users(db: Session):
         models.UserInfo.date.asc()
     ).all()
     
+def get_count(db: Session, role: str):
+    return db.query(
+        models.UserInfo
+    ).filter(
+        models.UserInfo.role == role
+    ).count()
+
 def delete_account(db: Session, id: str):
     userAccount = db.query(
         models.UserInfo

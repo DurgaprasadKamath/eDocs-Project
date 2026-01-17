@@ -1,0 +1,21 @@
+{% extends "navbar.html" %} {% block title %} eDocs - Upload {% endblock
+title %} {% block content %}
+
+<div class="upload-main-container">
+    <form action="/upload-document" method="post">
+        <div class="input-block">
+            <p id="label">Application Type</p>
+            <select name="appType" id="appType" required>
+                <option value="null" hidden selected>--</option>
+                <option value="SCHO_VER">Scholarship Verification</option>
+                <option value="LEA_REQ">Leave Request</option>
+                <option value="EVE_REQ">Event Request</option>
+                <option value="INT_REQ">Internship Request</option>
+                <option value="WORK_REQ">Workshop Request</option>
+                <option value="OTHER">Other</option>
+            </select>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

@@ -123,16 +123,20 @@ async def read_profile(
         return RedirectResponse(url="/login", status_code=303) 
     user = crud.get_user_by_email(db, email)
     
-    picPath = crud.get_profile_path(db, user.id)
-    if picPath:
-        picPath = picPath.path
-        nonePic = (len(picPath) == 0)
-    
-        if not nonePic:
-            picPath = str(picPath.replace("app",""))
+    if user:
+        picPath = crud.get_profile_path(db, user.id)
+        if picPath:
+            picPath = picPath.path
+            nonePic = (len(picPath) == 0)
+        
+            if not nonePic:
+                picPath = str(picPath.replace("app",""))
+        else:
+            picPath = None
+            nonePic = True
+
     else:
-        picPath = None
-        nonePic = True
+        return RedirectResponse(url="/login", status_code=303)
     
     return templates.TemplateResponse(
         "profile_data.html",
@@ -145,8 +149,7 @@ async def read_profile(
             "phone": user.phone,
             "dob": user.dob,
             "gender": user.gender,
-            "department": user.department,
-            "password": user.password,
+            "department": departments[user.department],
             "picPath": picPath,
             "noPic": nonePic,
             "verifyTxt": (user.name[0:4] + user.id[4:])
@@ -163,16 +166,20 @@ async def read_profile(
         return RedirectResponse(url="/login", status_code=303) 
     user = crud.get_user_by_email(db, email)
     
-    picPath = crud.get_profile_path(db, user.id)
-    if picPath:
-        picPath = picPath.path
-        nonePic = (len(picPath) == 0)
-    
-        if not nonePic:
-            picPath = str(picPath.replace("app",""))
+    if user:
+        picPath = crud.get_profile_path(db, user.id)
+        if picPath:
+            picPath = picPath.path
+            nonePic = (len(picPath) == 0)
+        
+            if not nonePic:
+                picPath = str(picPath.replace("app",""))
+        else:
+            picPath = None
+            nonePic = True
+
     else:
-        picPath = None
-        nonePic = True
+        return RedirectResponse(url="/login", status_code=303)
 
     return templates.TemplateResponse(
         "change_password.html",
@@ -202,16 +209,20 @@ async def read_profile(
         return RedirectResponse(url="/login", status_code=303) 
     user = crud.get_user_by_email(db, email)
     
-    picPath = crud.get_profile_path(db, user.id)
-    if picPath:
-        picPath = picPath.path
-        nonePic = (len(picPath) == 0)
-    
-        if not nonePic:
-            picPath = str(picPath.replace("app",""))
+    if user:
+        picPath = crud.get_profile_path(db, user.id)
+        if picPath:
+            picPath = picPath.path
+            nonePic = (len(picPath) == 0)
+        
+            if not nonePic:
+                picPath = str(picPath.replace("app",""))
+        else:
+            picPath = None
+            nonePic = True
+
     else:
-        picPath = None
-        nonePic = True
+        return RedirectResponse(url="/login", status_code=303)
     
     return templates.TemplateResponse(
         "edit_profile.html",
@@ -259,7 +270,7 @@ async def read_office_dashboard(
         return RedirectResponse(url="/login", status_code=303)
     
     return templates.TemplateResponse(
-        "/office_staff/index_office.html",
+        "/office_staff/index.html",
         {
             "request": request,
             "page": "dashboard",
@@ -398,6 +409,10 @@ async def read_office_manage(
             "allUser": allUser,
             "roles": roles,
             "departments": departments,
+            "studentCount": crud.get_count(db, "student"),
+            "officeCount": crud.get_count(db, "office_staff"),
+            "hodCount": crud.get_count(db, "hod"),
+            "facultyCount": crud.get_count(db, "faculty")
         }
     )
     
@@ -443,3 +458,87 @@ async def read_office_reports(
         }
     )
     
+#student backend
+@app.get("/student/dashboard", response_class=HTMLResponse)
+async def read_std_home(
+    request: Request
+):
+    email = request.session.get('email')
+    role = request.session.get('role')
+
+    if role != "student":
+        return RedirectResponse(url="/", status_code=303)
+    if not email:
+        return RedirectResponse(url="/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "student/index.html",
+        {
+            "request": request,
+            "page": "dashboard",
+            "role": role
+        }
+    )
+
+@app.get("/student/upload", response_class=HTMLResponse)
+async def read_std_home(
+    request: Request
+):
+    email = request.session.get('email')
+    role = request.session.get('role')
+
+    if role != "student":
+        return RedirectResponse(url="/", status_code=303)
+    if not email:
+        return RedirectResponse(url="/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "student/upload.html",
+        {
+            "request": request,
+            "page": "upload",
+            "role": role
+        }
+    )
+
+@app.get("/student/approved", response_class=HTMLResponse)
+async def read_std_home(
+    request: Request
+):
+    email = request.session.get('email')
+    role = request.session.get('role')
+
+    if role != "student":
+        return RedirectResponse(url="/", status_code=303)
+    if not email:
+        return RedirectResponse(url="/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "student/approved.html",
+        {
+            "request": request,
+            "page": "approved",
+            "role": role
+        }
+    )
+
+@app.get("/student/reports", response_class=HTMLResponse)
+async def read_std_home(
+    request: Request
+):
+    email = request.session.get('email')
+    role = request.session.get('role')
+
+    if role != "student":
+        return RedirectResponse(url="/", status_code=303)
+    if not email:
+        return RedirectResponse(url="/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "student/reports.html",
+        {
+            "request": request,
+            "page": "reports",
+            "role": role
+        }
+    )

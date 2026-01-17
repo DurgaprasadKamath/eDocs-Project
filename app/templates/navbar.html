@@ -77,6 +77,27 @@
           class="navbar-link {% if page == 'reports' %} active {% endif %}"
           >Reports</a
         >
+        {% elif role == 'student' %}
+        <a
+          href="/student/dashboard"
+          class="navbar-link {% if page == 'dashboard' %} active {% endif %}"
+          >Dashboard</a
+        >
+        <a
+          href="/student/upload"
+          class="navbar-link {% if page == 'upload' %} active {% endif %}"
+          >Upload</a
+        >
+        <a
+          href="/student/approved"
+          class="navbar-link {% if page == 'approved' %} active {% endif %}"
+          >Approved</a
+        >
+        <a
+          href="/student/reports"
+          class="navbar-link {% if page == 'reports' %} active {% endif %}"
+          >Reports</a
+        >
         {% endif %}
       </div>
       <div class="profile-block">
@@ -93,7 +114,7 @@
         <div class="dropdown-menu mt-1" id="dropdown-menu">
           <div class="link-block">
             <a href="/profile" id="link-text">Profile</a>
-            <a href="/" id="link-text">Settings</a>
+            <a href="/change-password" id="link-text">Change Password</a>
             <span id="hr-line"></span>
             <a href="/logout" id="logout-text">Log Out</a>
           </div>

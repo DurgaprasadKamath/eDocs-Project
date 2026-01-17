@@ -7,6 +7,12 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 import os
 import shutil
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
 
 router = APIRouter()
 
@@ -39,6 +45,12 @@ roles = {
     "student": "STUDENT"
 }
 
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
 @router.post("/login")
 async def login_user(
     request: Request,
@@ -65,7 +77,7 @@ async def login_user(
             }
         )
         
-    if password != user.password:
+    if not verify_password(password, user.password):
         return templates.TemplateResponse(
             "login.html",
             {
@@ -171,7 +183,7 @@ async def change_password(
         )
     
     if user:
-        user.password = password
+        user.password = hash_password(password)
         
         db.commit()
         db.refresh(user)
@@ -649,7 +661,11 @@ async def get_search_filter(
             "roles": roles,
             "departments": departments,
             "searchInput": searchInput,
-            "isEmpty": (len(allUser) == 0)
+            "isEmpty": (len(allUser) == 0),
+            "studentCount": crud.get_count(db, "student"),
+            "officeCount": crud.get_count(db, "office_staff"),
+            "hodCount": crud.get_count(db, "hod"),
+            "facultyCount": crud.get_count(db, "faculty")
         }
     )
     

@@ -35,9 +35,9 @@ endblock title %} {% block content %}
         <p id="label">Student Register Number</p>
         <input
           type="text"
-          id="id_no"
-          value="{{id_no or ''}}"
-          name="id_no"
+          id="id"
+          value="{{id or ''}}"
+          name="id"
           pattern="[0-9]{6,10}"
           placeholder="Enter ID Here"
           title="ID Cannot contain any alphabetic characters"

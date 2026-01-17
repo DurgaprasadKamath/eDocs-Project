@@ -89,7 +89,7 @@ nav.navbar-main {
       background-color: white;
       box-shadow: 0px 0px 2px var(--text-grey-color);
       height: 20vh;
-      width: 8vw;
+      width: 12vw;
       padding: 0%;
       .link-block {
         height: 100%;
@@ -878,6 +878,7 @@ nav.navbar-main {
     width: 100%;
     position: fixed;
     top: 8vh;
+    gap: 1.5vh;
     .block1,
     .block2 {
       padding: 1% 1.5%;
@@ -887,21 +888,64 @@ nav.navbar-main {
     }
     .block1 {
       display: flex;
-      padding-right: 2%;
+      flex-direction: row;
       background-color: var(--body-background);
-      form {
-        width: 100%;
+      justify-content: space-between;
+      padding: 0% 3%;
+      .count-block {
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        align-self: center;
         gap: 2vw;
+        .count {
+          width: 8vw;
+          display: flex;
+          justify-content: space-between;
+          padding: 1% 3%;
+          border-radius: 30px;
+          p {
+            margin: 0%;
+            align-self: center;
+            color: black;
+            font-weight: 550;
+            font-size: 0.9rem;
+          }
+          span {
+            background-color: #d9d9d9;
+            text-align: center;
+            width: 1.5vw;
+            height: 1.5vw;
+            align-self: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            border-radius: 50%;
+          }
+        }
+        .count.student {
+          box-shadow: 0px 0px 0px 2px var(--text-dark-green);
+        }
+        .count.hod {
+          box-shadow: 0px 0px 1px 2px #00bbf9;
+        }
+        .count.faculty {
+          box-shadow: 0px 0px 1px 2px var(--text-yellow);
+        }
+        .count.office {
+          box-shadow: 0px 0px 1px 2px #fb8500;
+        }
+      }
+      form {
+        width: 30%;
+        display: flex;
+        gap: 2vw;
+        padding: 0.5% 2%;
         .search-bar {
-          width: 30%;
+          width: 100%;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
           gap: 0%;
-          padding: 0.5% 1%;
+          padding: 1.5% 5%;
           background-color: var(--input-bg);
           border-radius: 25px;
           box-shadow: 0px 0px 0px 1px var(--text-grey-color);
@@ -1501,6 +1545,8 @@ nav.navbar-main {
     }
   }
 }
+
+
 
 @keyframes modalOpenAnim {
   0% {
