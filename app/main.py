@@ -73,6 +73,14 @@ roles = {
     "student": "STUDENT"
 }
 
+docTypes = {
+    "DOC_VER": "Document Verification",
+    "LEA_REQ": "Leave Request",
+    "EVE_REQ": "Event Request",
+    "INT_REQ": "Internship Request",
+    "WORK_REQ": "Workshop Request"
+}
+
 
 @app.get("/", response_class=HTMLResponse)
 async def read_home(
@@ -246,7 +254,8 @@ async def read_profile(
 #office staff backend
 @app.get("/office/dashboard", response_class=HTMLResponse)
 async def read_office_dashboard(
-    request: Request
+    request: Request,
+    db: Session = Depends(database.get_db)
 ):
     # from email.message import EmailMessage
     # import smtplib
@@ -268,6 +277,8 @@ async def read_office_dashboard(
         return RedirectResponse("/", status_code=303)
     if not email:
         return RedirectResponse(url="/login", status_code=303)
+
+    pendingDocs = crud.pending_docs_office(db)
     
     return templates.TemplateResponse(
         "/office_staff/index.html",
@@ -275,7 +286,10 @@ async def read_office_dashboard(
             "request": request,
             "page": "dashboard",
             "email": email,
-            "role": role
+            "role": role,
+            "pendingDocs": pendingDocs,
+            "departments": departments,
+            "docTypes": docTypes
         }
     )
 

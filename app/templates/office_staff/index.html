@@ -1,6 +1,74 @@
-{% extends "navbar.html" %} {% block title %} eDocs - Dashboard {% endblock title %} {%
-block content %}
-<div class="home-container">
-  <h4>Homepage</h4>
+{% extends "navbar.html" %} {% block title %} eDocs - Dashboard {% endblock
+title %} {% block content %}
+<div class="office-home-container">
+  {% for data in pendingDocs %}
+  <div class="pendingContainer">
+    <div class="block1">
+      <p id="appNo">
+        <i class="fa-regular fa-file-lines"></i>
+        {{data.app_no}}
+      </p>
+      <p id="role">
+        <i class="fa-solid fa-graduation-cap"></i>
+        {{data.sender_role}}
+      </p>
+    </div>
+    <hr />
+    <div class="block2">
+      <div class="content1">
+        <div class="valueList">
+          <p id="label">Name</p>
+          <p id="value">{{data.sender_name}}</p>
+        </div>
+        <div class="valueList">
+          <p id="label">Email</p>
+          <p id="value">{{data.sender_email}}</p>
+        </div>
+        <div class="valueList">
+          <p id="label">Submitted On</p>
+          <p id="value">{{data.date.strftime('%B %d, %Y - %I:%M %p')}}</p>
+        </div>
+      </div>
+      <div class="content2">
+        <div class="valueList">
+          <p id="label">Sender ID</p>
+          <p id="value">{{data.sender_id_no}}</p>
+        </div>
+        <div class="valueList">
+          <p id="label">Document Type</p>
+          <p id="value">{{docTypes[data.app_type]}}</p>
+        </div>
+        <div class="valueList">
+          <p id="label">Department</p>
+          <p id="value">{{departments[data.sender_department]}}</p>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="block3">
+      <p id="status">
+        <i class="fa-regular fa-clock"></i>
+        Pending
+      </p>
+      <a href="/office/view/{{data.app_no}}" target="_blank">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Preview
+      </a>
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock content %}
+
+<!-- {% for data in pendingDocs %}
+  <p>{{data.app_no}}</p>
+  <p>{{data.app_type}}</p>
+  <p>{{data.app_title}}</p>
+  <p>{{data.description}}</p>
+  <p>{{data.sender_email}}</p>
+  <p>{{data.sender_name}}</p>
+  <p>{{data.sender_id_no}}</p>
+  <p>{{departments[data.sender_department]}}</p>
+  <p>{{data.status}}</p>
+  <p>{{data.date}}</p>
+{% endfor %} -->

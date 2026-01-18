@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import String, or_
+from sqlalchemy import String, or_, and_
 from app import models, schemas
 from collections import defaultdict
 from datetime import date, datetime
@@ -198,3 +198,15 @@ def add_document(
     db.commit()
     db.refresh(db_appData)
     return db_appData
+
+def pending_docs_office(db: Session):
+    return db.query(
+        models.DocumentInfo
+    ).filter(
+        and_(
+            models.DocumentInfo.rec_role == 'office_staff',
+            models.DocumentInfo.status == 'Pending'
+        )
+    ).order_by(
+        models.DocumentInfo.date.desc()
+    ).all()
