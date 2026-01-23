@@ -765,3 +765,31 @@ async def upload_document(
     crud.add_document(db, appData)
 
     return RedirectResponse(url="/", status_code=303)
+
+@router.post("/delete-doc/{appNo}")
+async def delete_app(
+    request: Request,
+    appNo: str,
+    db: Session = Depends(database.get_db)
+):
+    appDoc = db.query(
+        models.DocumentInfo
+    ).filter(
+        models.DocumentInfo.app_no == appNo
+    ).first()
+    appPath = appDoc.app_path
+    
+    if appDoc:
+        os.remove(appPath)
+        db.delete(appDoc)
+        db.commit()
+        
+    return RedirectResponse(url="/", status_code=303)
+
+@router.post("/approve/{appNo}")
+async def approve_app(
+    request: Request,
+    appNo: str,
+    db: Session = Depends(database.get_db)
+):
+    return RedirectResponse(url="/", status_code=303)

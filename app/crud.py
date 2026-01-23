@@ -208,5 +208,5 @@ def pending_docs_office(db: Session):
             models.DocumentInfo.status == 'Pending'
         )
     ).order_by(
-        models.DocumentInfo.date.desc()
+        models.DocumentInfo.date.asc()
     ).all()

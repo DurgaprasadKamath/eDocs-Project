@@ -472,6 +472,34 @@ async def read_office_reports(
         }
     )
     
+@app.get("/office/view/{appNo}")
+async def view_document(
+    request: Request,
+    appNo: str,
+    db: Session = Depends(database.get_db)
+):
+    appDoc = db.query(
+        models.DocumentInfo
+    ).filter(
+        models.DocumentInfo.app_no == appNo
+    ).first()
+    appPath = str(appDoc.app_path)
+    
+    return templates.TemplateResponse(
+        "/office_staff/view_doc.html",
+        {
+            "request": request,
+            "appNo": appNo,
+            "appType": docTypes[appDoc.app_type],
+            "appDesc": appDoc.description,
+            "senderEmail": appDoc.sender_email,
+            "senderName": appDoc.sender_name,
+            "senderIdNo": appDoc.sender_id_no,
+            "sentDate": appDoc.date,
+            "appPath": appPath.replace("app", ""),
+        }
+    )
+    
 #student backend
 @app.get("/student/dashboard", response_class=HTMLResponse)
 async def read_std_home(
