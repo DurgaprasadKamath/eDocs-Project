@@ -23,6 +23,7 @@ class Documents(BaseModel):
     sender_id_no: str
     sender_department: str
     sender_role: str
-    date: datetime
     rec_role: str
     status: str
+    rejectTxt: str
+    date: datetime

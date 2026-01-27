@@ -45,6 +45,14 @@ roles = {
     "student": "STUDENT"
 }
 
+docTypes = {
+    "DOC_VER": "Document Verification",
+    "LEA_REQ": "Leave Request",
+    "EVE_REQ": "Event Request",
+    "INT_REQ": "Internship Request",
+    "WORK_REQ": "Workshop Request"
+}
+
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
@@ -626,7 +634,7 @@ async def reset_account(
     crud.reset_account(db, id)
     return RedirectResponse(url="/office/manage", status_code=303)
 
-#filter search
+#filter manage
 @router.post("/office/manage")
 async def serach_filter(
     request: Request,
@@ -668,7 +676,44 @@ async def get_search_filter(
             "facultyCount": crud.get_count(db, "faculty")
         }
     )
+
+#filter reports
+@router.post("/office/reports")
+async def search_reports(
+    request: Request,
+    searchInput: str = Form(...)
+):
+    return RedirectResponse(url=f"/office/reports/{searchInput}", status_code=303)
+
+@router.get("/office/reports/{searchInput}")
+async def get_search_reports(
+    request: Request,
+    searchInput: str,
+    db: Session = Depends(database.get_db)
+):
+    email = request.session.get('email')
+    role = request.session.get('role')
     
+    if role != "office_staff":
+        return RedirectResponse("/", status_code=303)
+    if not email:
+        return RedirectResponse(url="/login", status_code=303)
+
+    allReports = crud.office_filter_reports(db, searchInput)
+    
+    return templates.TemplateResponse(
+        "/office_staff/reports.html",
+        {
+            "request": request,
+            "page": "reports",
+            "role": role,
+            "allReports": allReports,
+            "isEmpty": (len(allReports) == 0),
+            "searchInput": searchInput,
+            "docType": docTypes
+        }
+    )
+
 @router.post("/upload-profile")
 async def upload_profile(
     request: Request,
@@ -759,6 +804,7 @@ async def upload_document(
         sender_role = user.role,
         rec_role = rec_role,
         status = "Pending",
+        rejectTxt = "",
         date = datetime.now()
     )
     
@@ -766,7 +812,7 @@ async def upload_document(
 
     return RedirectResponse(url="/", status_code=303)
 
-@router.post("/delete-doc/{appNo}")
+@router.post("/office/reports/delete/{appNo}")
 async def delete_app(
     request: Request,
     appNo: str,
@@ -784,7 +830,7 @@ async def delete_app(
         db.delete(appDoc)
         db.commit()
         
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/office/reports", status_code=303)
 
 @router.post("/approve/{appNo}")
 async def approve_app(
@@ -792,4 +838,35 @@ async def approve_app(
     appNo: str,
     db: Session = Depends(database.get_db)
 ):
+    return RedirectResponse(url="/", status_code=303)
+
+@router.post("/reject/{appNo}")
+async def reject_app(
+    request: Request,
+    appNo: str,
+    rejectReason: str = Form(...),
+    db: Session = Depends(database.get_db)
+):
+    appDoc = crud.get_pending_doc(db, appNo)
+    if appDoc:
+        appDoc.rejectTxt = rejectReason
+        appDoc.status = "Rejected"
+        db.commit()
+        db.refresh(appDoc)
+        return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/office/view/{appNo}", status_code=303)
+
+@router.post("/office/preview/{appNo}")
+async def view_doc(
+    request: Request,
+    appNo: str,
+    db: Session = Depends(database.get_db)
+):
+    appDoc = crud.get_pending_doc(db, appNo)
+    if appDoc:
+        appDoc.status = "Under Process"
+        db.commit()
+        db.refresh(appDoc)
+        
+        return RedirectResponse(url=f"/office/preview/{appNo}", status_code=303)
     return RedirectResponse(url="/", status_code=303)

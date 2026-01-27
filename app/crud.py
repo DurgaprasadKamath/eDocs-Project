@@ -87,6 +87,8 @@ def get_all_users(db: Session):
         models.UserInfo.date.asc()
     ).all()
     
+
+    
 def get_count(db: Session, role: str):
     return db.query(
         models.UserInfo
@@ -209,4 +211,35 @@ def pending_docs_office(db: Session):
         )
     ).order_by(
         models.DocumentInfo.date.asc()
+    ).all()
+    
+def get_pending_doc(db: Session, appNo: str):
+    return db.query(
+        models.DocumentInfo
+    ).filter(
+        models.DocumentInfo.app_no == appNo
+    ).first()
+    
+def get_office_reports(db: Session):
+    return db.query(
+        models.DocumentInfo
+    ).filter(
+        models.DocumentInfo.rec_role == "office_staff"
+    ).order_by(
+        models.DocumentInfo.app_no.asc()
+    ).all()
+    
+def office_filter_reports(db: Session, searchInput: str):
+    return db.query(
+        models.DocumentInfo
+    ).filter(
+        or_(
+            models.DocumentInfo.app_no.ilike(f"%{searchInput}%"),
+            models.DocumentInfo.sender_id_no.ilike(f"%{searchInput}%"),
+            models.DocumentInfo.sender_name.ilike(f"%{searchInput}%"),
+            models.DocumentInfo.status.ilike(f"%{searchInput}%"),
+            models.DocumentInfo.app_type.ilike(f"%{searchInput}%")
+        )
+    ).order_by(
+        models.DocumentInfo.app_no.asc()
     ).all()

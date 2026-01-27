@@ -46,6 +46,10 @@
             <p id="value">{{appType}}</p>
           </div>
           <div class="data-value">
+            <p id="label">Application Title:</p>
+            <p id="value">{{appTitle}}</p>
+          </div>
+          <div class="data-value">
             <p id="label">Description:</p>
             <p id="value">{{appDesc}}</p>
           </div>
@@ -67,17 +71,48 @@
           </div>
         </div>
         <div class="action-bar">
-          <form action="/reject/{{appNo}}" method="post">
-            <button id="rejectBtn" type="submit">Reject</button>
-          </form>
+          <button id="rejectBtn" type="button" onclick="rejectModal()">
+            Reject
+          </button>
           <form action="/approve/{{appNo}}" method="post">
             <button id="approveBtn" type="submit">Approve</button>
           </form>
-          <!-- <form action="/delete-doc/{{appNo}}" id="deleteForm" method="post">
+          <form action="/delete-doc/{{appNo}}" id="deleteForm" method="post">
             <button type="submit">Delete</button>
-          </form> -->
+          </form>
         </div>
       </div>
     </div>
+
+    <div class="reject-modal-main" id="rejectModal" style="display: none">
+      <div class="modal-content">
+        <form action="/reject/{{appNo}}" method="post">
+          <div class="input-block">
+            <p id="label">Reason for Rejection</p>
+            <textarea
+              name="rejectReason"
+              placeholder="Reason Here"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          <div class="buttonBlock">
+            <button type="button" onclick="rejectModal()">Close</button>
+            <button type="submit">Reject</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function rejectModal() {
+        const rejectModal = document.getElementById("rejectModal");
+        if (rejectModal.style.display === "none") {
+          rejectModal.style.display = "flex";
+        } else {
+          rejectModal.style.display = "none";
+        }
+      }
+    </script>
   </body>
 </html>

@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Depends
 from fastapi.responses import RedirectResponse, Response, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from app.database import Base, engine
+from app.database import Base, engine, SessionLocal
 from app.models import UserInfo
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -11,6 +11,9 @@ from app import crud, database, models
 from sqlalchemy.orm import Session
 from collections import defaultdict
 from datetime import datetime
+from sqlalchemy import and_, or_
+import asyncio
+from sse_starlette.sse import EventSourceResponse
 
 app = FastAPI()
 
@@ -81,6 +84,91 @@ docTypes = {
     "WORK_REQ": "Workshop Request"
 }
 
+async def refresh_office_home(db: Session):
+    prev_count = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.status == "Pending"
+    ).count()
+    
+    while True:
+        await asyncio.sleep(2)
+
+        cur_count = db.query(models.DocumentInfo).filter(
+            models.DocumentInfo.status == "Pending"
+        ).count()
+        
+        if cur_count != prev_count:
+            prev_count = cur_count
+            
+            yield {
+                "event": "db_change",
+                "data": "database updated"
+            }
+
+@app.get("/office_home_refresh")
+async def sse_endpoint(db: Session = Depends(database.get_db)):
+    return EventSourceResponse(refresh_office_home(db))
+
+async def refresh_office_reports(db: Session):
+    prev_rep_count = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.rec_role == "office_staff"
+    ).count()
+    prev_pending = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.status == "Pending"
+    ).count()
+    prev_process = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.status == "Under Process"
+    ).count()
+    prev_reject = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.status == "Rejected"
+    ).count()
+    prev_approved = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.status == "Approved"
+    ).count()
+    
+    while True:
+        await asyncio.sleep(2)
+        
+        curr_rep_count = db.query(models.DocumentInfo).filter(
+            models.DocumentInfo.rec_role == "office_staff"
+        ).count()
+        curr_pending = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.status == "Pending"
+        ).count()
+        curr_process = db.query(models.DocumentInfo).filter(
+            models.DocumentInfo.status == "Under Process"
+        ).count()
+        curr_reject = db.query(models.DocumentInfo).filter(
+            models.DocumentInfo.status == "Rejected"
+        ).count()
+        curr_approved = db.query(models.DocumentInfo).filter(
+            models.DocumentInfo.status == "Approved"
+        ).count()
+        
+        if (
+            curr_rep_count != prev_rep_count
+            or
+            curr_pending != prev_pending
+            or
+            curr_process != prev_process
+            or
+            curr_reject != prev_reject
+            or
+            curr_approved != prev_approved
+            ):
+            prev_rep_count = curr_rep_count
+            prev_pending = curr_pending
+            prev_process = curr_process
+            prev_reject = curr_reject
+            prev_approved = curr_approved
+            
+            yield {
+                "event": "db_change",
+                "data": "database updated"
+            }
+        
+@app.get("/office_reports_refresh")
+async def sse_endpoint(db: Session = Depends(database.get_db)):
+    return EventSourceResponse(refresh_office_reports(db))
 
 @app.get("/", response_class=HTMLResponse)
 async def read_home(
@@ -251,6 +339,29 @@ async def read_profile(
         }
     )
     
+@app.get("/view/{appNo}", response_class=HTMLResponse)
+async def read_view_docs(
+    request: Request,
+    appNo: str,
+    db: Session = Depends(database.get_db)
+):
+    appDoc = db.query(models.DocumentInfo).filter(
+        models.DocumentInfo.app_no == appNo
+    ).first()
+    if not appDoc:
+        return RedirectResponse(url="/", status_code=303)
+        
+    appPath = str(appDoc.app_path)
+    
+    return templates.TemplateResponse(
+        "view_all.html",
+        {
+            "request": request,
+            "appPath": appPath.replace("app", ""),
+            "appNo": appNo
+        }
+    )
+    
 #office staff backend
 @app.get("/office/dashboard", response_class=HTMLResponse)
 async def read_office_dashboard(
@@ -289,7 +400,7 @@ async def read_office_dashboard(
             "role": role,
             "pendingDocs": pendingDocs,
             "departments": departments,
-            "docTypes": docTypes
+            "docTypes": docTypes,
         }
     )
 
@@ -453,7 +564,8 @@ async def read_office_upload(
 
 @app.get("/office/reports", response_class=HTMLResponse)
 async def read_office_reports(
-    request: Request
+    request: Request,
+    db: Session = Depends(database.get_db)
 ):
     email = request.session.get('email')
     role = request.session.get('role')
@@ -468,11 +580,13 @@ async def read_office_reports(
         {
             "request": request,
             "page": "reports",
-            "role": role
+            "role": role,
+            "allReports": crud.get_office_reports(db),
+            "docType": docTypes
         }
     )
     
-@app.get("/office/view/{appNo}")
+@app.get("/office/preview/{appNo}")
 async def view_document(
     request: Request,
     appNo: str,
@@ -485,6 +599,9 @@ async def view_document(
     ).first()
     appPath = str(appDoc.app_path)
     
+    if appDoc.status != "Under Process":
+        return RedirectResponse(url="/", status_code=303)
+    
     return templates.TemplateResponse(
         "/office_staff/view_doc.html",
         {
@@ -496,6 +613,7 @@ async def view_document(
             "senderName": appDoc.sender_name,
             "senderIdNo": appDoc.sender_id_no,
             "sentDate": appDoc.date,
+            "appTitle": appDoc.app_title,
             "appPath": appPath.replace("app", ""),
         }
     )

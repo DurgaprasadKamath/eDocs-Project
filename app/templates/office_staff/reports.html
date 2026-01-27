@@ -1,3 +1,98 @@
-{% extends "navbar.html" %} {% block title %} eDocs - Reports {% endblock title %} {%
-block content %}
+{% extends "navbar.html" %} {% block title %} eDocs - Reports {% endblock title
+%} {% block content %}
+
+<div class="report-office-main">
+  <div class="title-bar">
+    <div class="block1">
+      <form action="/office/reports" method="post" id="searchForm">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="search"
+            name="searchInput"
+            id="searchInput"
+            placeholder="Search"
+            value="{{searchInput or ''}}"
+            autofocus
+          />
+        </div>
+      </form>
+    </div>
+    <div class="block2">
+      <p id="appNo">Application No</p>
+      <p id="appType">Application Type</p>
+      <p id="name">Name</p>
+      <p id="id">ID</p>
+      <p id="date">Date</p>
+      <p id="status">Status</p>
+      <p id="actions"></p>
+    </div>
+  </div>
+  <div class="report-list">
+    {% if isEmpty %}
+      <p id="empty">No applications found!</p>
+    {% endif %}
+    {% for report in allReports %}
+    <div class="report-block">
+      <p id="appNo">{{report.app_no}}</p>
+      <p id="appType">{{docType[report.app_type]}}</p>
+      <p id="name">{{report.sender_name}}</p>
+      <p id="id">{{report.sender_id_no}}</p>
+      <p id="date">{{report.date.strftime('%d / %m / %Y')}}</p>
+      <div class="status">
+        <p
+          class="{% if report.status == 'Pending' %} pending {% elif report.status == 'Under Process' %} underProcess {% elif report.status == 'Rejected' %} rejected {% elif report.status == 'Approved' %} approved {% endif %}"
+        >
+          {{report.status}}
+        </p>
+      </div>
+      <div class="actions">
+        <a href="/view/{{report.app_no}}" target="_blank">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        <form action="/office/reports/delete/{{report.app_no}}" method="post">
+          <button type="submit">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  const eventSource = new EventSource("/office_reports_refresh");
+
+  eventSource.addEventListener("db_change", function (event) {
+    location.reload();
+  });
+
+  eventSource.onerror = function () {
+    console.log("SSE connection lost");
+  };
+
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  let submitTimer;
+
+  if (searchInput) {
+    const val = searchInput.value;
+    searchInput.value = "";
+    searchInput.value = val;
+  }
+
+  searchInput.addEventListener("input", () => {
+    clearTimeout(submitTimer);
+
+    submitTimer = setTimeout(() => {
+      if (searchInput.value.trim() != "") {
+        searchForm.submit();
+      }
+      if (searchInput.value == "") {
+        searchForm.submit();
+      }
+    }, 600);
+  });
+</script>
 {% endblock content %}

@@ -37,4 +37,5 @@ class DocumentInfo(Base):
     sender_role = Column(String, nullable=False)
     rec_role = Column(String, nullable=False)
     status = Column(String, nullable=False)
+    rejectTxt = Column(String)
     date = Column(DateTime, nullable=False)

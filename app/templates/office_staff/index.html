@@ -50,12 +50,25 @@ title %} {% block content %}
         <i class="fa-regular fa-clock"></i>
         Pending
       </p>
-      <a href="/office/view/{{data.app_no}}">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        Preview
-      </a>
+      <form action="/office/preview/{{data.app_no}}" method="post">
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i> Preview
+        </button>
+      </form>
     </div>
   </div>
   {% endfor %}
 </div>
+
+<script>
+  const eventSource = new EventSource("/office_home_refresh");
+
+  eventSource.addEventListener("db_change", function (event) {
+    location.reload();
+  });
+
+  eventSource.onerror = function () {
+    console.log("SSE connection lost");
+  };
+</script>
 {% endblock content %}

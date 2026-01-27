@@ -577,7 +577,7 @@ nav.navbar-main {
   grid-template-columns: 4fr 4fr 4fr;
   justify-content: space-evenly;
   gap: 2.5vw;
-  padding: 0% 3vw;
+  padding: 2% 3vw;
   .pendingContainer {
     display: flex;
     flex-direction: column;
@@ -676,20 +676,26 @@ nav.navbar-main {
         align-self: center;
         padding: 1.2% 0%;
       }
-      a {
+      form {
         width: 27%;
-        text-align: center;
-        background-color: var(--primary-color);
-        color: white;
-        text-decoration: none;
-        border-radius: 35px;
-        font-size: 0.85rem;
-        font-weight: 550;
-        align-self: center;
-        padding: 1.2% 0%;
-        transition: 0.3s;
+        button {
+          height: 100%;
+          width: 100%;
+          text-align: center;
+          background-color: var(--primary-color);
+          color: white;
+          padding: 1.2% 0%;
+          text-decoration: none;
+          border-radius: 35px;
+          font-size: 0.85rem;
+          font-weight: 550;
+          align-self: center;
+          outline: none;
+          border: none;
+          transition: 0.3s;
+        }
       }
-      a:hover {
+      button:hover {
         background-color: var(--secondary-color);
         transition: 0.3s;
       }
@@ -723,6 +729,7 @@ nav.navbar-main {
     justify-content: center;
     gap: 5vh;
     padding: 2% 3%;
+    box-shadow: 0px 1px 5px var(--text-grey-color);
     p {
       margin: 0%;
     }
@@ -743,17 +750,23 @@ nav.navbar-main {
         width: 100%;
       }
       p#label {
-        width: 30%;
+        min-width: 30%;
         font-size: 0.9rem;
         color: var(--text-grey-color);
         font-weight: 550;
         align-self: baseline;
+        button {
+          border: none;
+          outline: none;
+          background-color: transparent;
+        }
       }
       p#value {
         font-size: 1.1rem;
         color: black;
         font-weight: 600;
         align-self: baseline;
+        text-align: justify;
       }
     }
     .action-bar {
@@ -761,7 +774,7 @@ nav.navbar-main {
       flex-direction: column;
       justify-content: center;
       gap: 1vw;
-      button{
+      button {
         width: 40%;
         border: none;
         outline: none;
@@ -771,10 +784,88 @@ nav.navbar-main {
         font-size: 0.9rem;
         padding: 1%;
       }
-      button#rejectBtn{
+      button#rejectBtn {
         background-color: var(--text-red);
       }
-      button#approveBtn{
+      button#approveBtn {
+        background-color: var(--primary-color);
+      }
+    }
+  }
+}
+
+.reject-modal-main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  background-color: #5959598a;
+  .modal-content {
+    width: 30%;
+    height: 30%;
+    background-color: white;
+    align-self: center;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 1px var(--text-grey-color);
+    padding: 1% 2%;
+    form {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
+      gap: 2vh;
+      .input-block {
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+        p#label {
+          margin: 0%;
+          font-size: 0.8rem;
+          font-weight: 550;
+          color: var(--primary-color);
+        }
+        textarea {
+          width: 100%;
+          resize: none;
+          font-weight: 550;
+          outline: none;
+          border: none;
+          background-color: var(--input-bg);
+          padding: 1%;
+          border-radius: 5px;
+          box-shadow: 0px 0px 2px var(--text-grey-color);
+        }
+        ::placeholder {
+          font-size: 0.8rem;
+          color: var(--text-grey-color);
+          font-weight: 550;
+        }
+      }
+      .buttonBlock {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1.5vw;
+        button {
+          width: 40%;
+          border-radius: 30px;
+          align-self: center;
+          padding: 1.5%;
+          color: white;
+          font-size: 0.9rem;
+          font-weight: 550;
+          border: none;
+          outline: none;
+          transition: 0.3s;
+        }
+      }
+      button[type="button"] {
+        background-color: var(--text-red);
+      }
+      button[type="submit"] {
         background-color: var(--primary-color);
       }
     }
@@ -1223,6 +1314,202 @@ nav.navbar-main {
         }
       }
     }
+  }
+}
+
+.report-office-main {
+  display: flex;
+  flex-direction: column;
+  .title-bar {
+    position: fixed;
+    top: 8vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    background-color: var(--body-background);
+    z-index: 5;
+    .block1 {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      form {
+        width: 30%;
+        .search-bar {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+          align-self: center;
+          background-color: var(--input-bg);
+          border-radius: 30px;
+          border: 2px solid var(--text-grey-color);
+          padding: 1.5% 3%;
+          i {
+            width: 5%;
+            font-size: 0.8rem;
+            align-self: center;
+          }
+          input[type="search"] {
+            width: 90%;
+            background-color: transparent;
+            outline: none;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 550;
+          }
+          ::placeholder {
+            font-size: 0.8rem;
+            font-weight: 550;
+            color: var(--text-grey-color);
+          }
+        }
+      }
+    }
+    .block2 {
+      height: 6vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      padding: 0% 1%;
+      background-color: var(--text-grey-color);
+      p {
+        margin: 0%;
+        color: white;
+        align-self: center;
+        font-size: 0.9rem;
+        font-weight: 550;
+      }
+    }
+  }
+  .report-list {
+    height: fit-content;
+    width: 100%;
+    background-color: var(--body-background);
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    position: absolute;
+    top: 23vh;
+    padding-bottom: 1%;
+    z-index: 1;
+    p#empty{
+      margin: 0%;
+      font-size: 0.9rem;
+      font-weight: 550;
+      align-self: center;
+    }
+    .report-block {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      width: 98%;
+      padding: 0.5% 0%;
+      border-radius: 5px;
+      align-self: center;
+      background-color: white;
+      box-shadow: 0px 0px 2px var(--text-grey-color);
+      p {
+        margin: 0%;
+        align-self: center;
+        font-size: 0.9rem;
+        font-weight: 550;
+      }
+      p#appNo {
+        font-weight: 900;
+        color: var(--primary-color);
+      }
+    }
+    .report-block:hover {
+      .actions button,
+      a {
+        display: block;
+      }
+      button:hover,
+      a:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+  p#appNo {
+    width: 20%;
+  }
+  p#appType,
+  p#name {
+    width: 15%;
+  }
+  p#id,
+  p#date,
+  p#status {
+    width: 10%;
+  }
+  p#actions {
+    width: 5%;
+  }
+  .actions {
+    width: 5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    form {
+      display: flex;
+    }
+    button,
+    a {
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.9rem;
+      display: none;
+      align-self: center;
+      color: black;
+    }
+  }
+  .status {
+    align-self: center;
+    width: 10%;
+    p {
+      width: 80%;
+      text-align: center;
+      padding: 2% 0%;
+      border-radius: 30px;
+    }
+    p.pending {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-brown);
+      background-color: var(--text-yellow);
+    }
+    p.underProcess {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--text-green);
+    }
+    p.rejected {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--text-red);
+    }
+    p.approved {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--text-dark-green);
+    }
+  }
+}
+
+.view-doc-main{
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  iframe{
+    width: 100%;
+    height: 100%;
   }
 }
 
