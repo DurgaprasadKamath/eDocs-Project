@@ -748,16 +748,9 @@ async def delete_profile(
     
     return RedirectResponse("/profile", status_code=303)
 
-@router.post("/student/upload")
-async def upload_document(
-    request: Request,
-    email: str = Form(...),
-    appType: str = Form(...),
-    docTitle: str = Form(...),
-    description: str = Form(...),
-    docFile: UploadFile = File(...),
-    db: Session = Depends(database.get_db)
-):    
+def get_app_no(
+    db: Session
+):
     app_list = db.query(
         models.DocumentInfo
     ).order_by(
@@ -765,7 +758,6 @@ async def upload_document(
     ).first()
     
     year = datetime.today().strftime("%Y")
-    user = crud.get_user_by_email(db, email)
     
     if not app_list:
         num = 10001
@@ -777,6 +769,22 @@ async def upload_document(
         num = int(num)
         num += 1
         app_no = f"EDOC-{year}-0{num}"
+        
+    return app_no
+
+@router.post("/student/upload")
+async def upload_document(
+    request: Request,
+    email: str = Form(...),
+    appType: str = Form(...),
+    docTitle: str = Form(...),
+    description: str = Form(...),
+    docFile: UploadFile = File(...),
+    db: Session = Depends(database.get_db)
+):    
+    user = crud.get_user_by_email(db, email)
+    
+    app_no = get_app_no(db)
     
     _, ext = os.path.splitext(docFile.filename)
     
@@ -870,3 +878,9 @@ async def view_doc(
         
         return RedirectResponse(url=f"/office/preview/{appNo}", status_code=303)
     return RedirectResponse(url="/", status_code=303)
+
+@router.post("/office/upload/student")
+async def upload_student_doc(
+    request: Request
+):
+    return RedirectResponse(url="/office/upload/student", status_code=303)
